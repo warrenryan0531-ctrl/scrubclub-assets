@@ -1,0 +1,150 @@
+/* ==========================================================================
+   ACCESSIBILITY WIDGET — 904 STANDARD  (vanilla port of A11yWidget.tsx +
+   the ACCESSIBILITY WIDGET PREFERENCES block in 904's globals.css)
+
+   Per-client: --a11y-accent (header bar + active tile) and --a11y-launcher
+   (the FAB). Nothing else varies. Panel metrics are in px on purpose so the
+   panel itself does not grow when the visitor bumps Bigger text.
+
+   Preference classes are toggled on <html>; the widget's own rules are all
+   id-scoped so the preferences never fight the panel they are set from.
+   ========================================================================== */
+:root{--a11y-accent:#1FA9C7;--a11y-accent-rgb:31,169,199;--a11y-launcher:#7C5B3E;--a11y-fab-bottom:96px}
+
+/* ---------------------------------------------------------- launcher ---- */
+#a11y-fab{position:fixed;bottom:var(--a11y-fab-bottom);right:20px;left:auto;z-index:10000;margin:0;padding:0;width:56px;height:56px;display:flex;align-items:center;justify-content:center;border:0;border-radius:9999px;background:var(--a11y-launcher);color:#fff;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .3s ease,box-shadow .3s ease,opacity .3s ease;-webkit-appearance:none;appearance:none;font:inherit;line-height:0}
+#a11y-fab:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.34)}
+#a11y-fab:focus-visible{outline:3px solid #fff;outline-offset:3px}
+#a11y-fab svg{display:block;width:26px;height:26px}
+html.a11y-pos-left #a11y-fab{right:auto;left:20px}
+
+/* ------------------------------------------------------------- panel ---- */
+
+/* While the page is moving the launcher steps back, because on a phone the
+   copy runs full width and a fixed control in the left margin will sit on
+   top of something at almost every scroll position. It comes back the
+   moment scrolling stops, and never tucks while the panel is open or while
+   it has focus. */
+html.a11y-fab-tucked #a11y-fab{opacity:.26;transform:scale(.72)}
+html.a11y-fab-tucked #a11y-fab:hover,html.a11y-fab-tucked #a11y-fab:focus-visible,html.a11y-fab-tucked #a11y-fab:active{opacity:1;transform:none}
+#a11y-panel{position:fixed;bottom:calc(var(--a11y-fab-bottom) + 76px);right:20px;left:auto;z-index:10010;display:flex;flex-direction:column;width:380px;max-width:calc(100vw - 40px);max-height:min(640px,calc(100vh - var(--a11y-fab-bottom) - 96px));overflow:hidden;border-radius:20px;background:#fff;color:#171717;box-shadow:0 20px 60px rgba(0,0,0,.28);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;letter-spacing:normal;text-transform:none}
+html.a11y-pos-left #a11y-panel{right:auto;left:20px}
+#a11y-panel[hidden]{display:none!important}
+#a11y-panel,#a11y-panel *{box-sizing:border-box;text-align:left!important;font-family:inherit!important;line-height:1.35!important;filter:none!important;text-transform:none!important;letter-spacing:normal!important;font-style:normal!important;font-weight:400!important;text-decoration:none!important;text-shadow:none!important;color:inherit}
+#a11y-panel .cva11y-title{text-transform:uppercase!important;letter-spacing:.16em!important;font-weight:600!important}
+#a11y-panel .cva11y-seclabel{text-transform:uppercase!important;letter-spacing:.16em!important;font-weight:600!important}
+#a11y-panel .cva11y-reset{text-transform:uppercase!important;letter-spacing:.14em!important;font-weight:600!important}
+#a11y-panel .cva11y-detail{text-transform:capitalize!important}
+#a11y-panel svg{display:block;flex:none}
+
+#a11y-panel .cva11y-head{display:flex;flex-shrink:0;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;background:var(--a11y-accent);color:#fff}
+#a11y-panel .cva11y-head-l{display:flex;align-items:center;gap:12px}
+#a11y-panel .cva11y-head svg{width:24px;height:24px}
+#a11y-panel .cva11y-title{font-size:15px;color:#fff!important}
+#a11y-panel .cva11y-close{display:flex;width:36px;height:36px;flex:none;align-items:center;justify-content:center;padding:0;border:0;border-radius:8px;background:rgba(255,255,255,.2);color:#fff!important;cursor:pointer;-webkit-appearance:none;appearance:none}
+#a11y-panel .cva11y-close:hover{background:rgba(255,255,255,.3)}
+#a11y-panel .cva11y-close svg{width:18px;height:18px}
+
+#a11y-panel .cva11y-body{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;padding:20px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+#a11y-panel .cva11y-seclabel{display:block;margin:0 0 12px;font-size:11px;color:#a3a3a3!important}
+#a11y-panel .cva11y-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 24px}
+#a11y-panel .cva11y-grid.is-last{margin-bottom:20px}
+
+#a11y-panel .cva11y-tile{display:flex;min-height:104px;flex-direction:column;justify-content:space-between;padding:16px;border:1px solid rgba(0,0,0,.1);border-radius:16px;background:rgba(0,0,0,.03);color:#171717;cursor:pointer;transition:border-color .2s ease,background-color .2s ease;-webkit-appearance:none;appearance:none;font:inherit}
+#a11y-panel .cva11y-tile:hover{border-color:rgba(0,0,0,.25)}
+#a11y-panel .cva11y-tile[aria-pressed="true"]{border-color:var(--a11y-accent);background:rgba(var(--a11y-accent-rgb),.1)}
+#a11y-panel .cva11y-tile-top{display:flex;width:100%;align-items:flex-start;justify-content:space-between}
+#a11y-panel .cva11y-ico{display:block;color:#404040!important}
+#a11y-panel .cva11y-ico svg{width:22px;height:22px}
+#a11y-panel .cva11y-tile[aria-pressed="true"] .cva11y-ico{color:var(--a11y-accent)!important}
+#a11y-panel .cva11y-label{display:block;margin-top:12px;font-size:15px;line-height:1.25!important;color:#171717!important}
+#a11y-panel .cva11y-detail{display:block;margin-top:2px;font-size:12px;color:#737373!important}
+#a11y-panel .cva11y-dashes{display:flex;align-items:center;gap:4px}
+#a11y-panel .cva11y-dash{display:block;width:12px;height:3px;border-radius:9999px;background:rgba(0,0,0,.2);transition:background-color .2s ease}
+#a11y-panel .cva11y-dash.is-on{background:var(--a11y-accent)}
+
+#a11y-panel .cva11y-reset{display:flex;width:100%;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid rgba(0,0,0,.1);border-radius:16px;background:rgba(0,0,0,.03);font:inherit;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:#737373!important;cursor:pointer;transition:border-color .2s ease,color .2s ease;-webkit-appearance:none;appearance:none}
+#a11y-panel .cva11y-reset:hover{border-color:rgba(0,0,0,.25);color:#171717!important}
+#a11y-panel .cva11y-reset svg{width:18px;height:18px}
+#a11y-panel .cva11y-tile:focus-visible,#a11y-panel .cva11y-reset:focus-visible,#a11y-panel .cva11y-close:focus-visible{outline:3px solid var(--a11y-accent);outline-offset:2px}
+
+/* -------------------------------------------------- reading mask / veil -- */
+#a11y-mask{position:fixed;inset:0;z-index:9995;pointer-events:none}
+#a11y-mask div{position:absolute;left:0;right:0;background:rgba(0,0,0,.7)}
+#a11y-mask .cva11y-mask-t{top:0}
+/* Grayscale is painted as a backdrop veil rather than filter:grayscale() on a
+   wrapper — a filtered ancestor becomes the containing block for position:fixed
+   descendants, which would unstick this template's .header--sticky, .modal and
+   .cookie-consent. The veil desaturates everything painted beneath it and
+   changes no layout at all. */
+#a11y-veil{position:fixed;inset:0;z-index:9990;pointer-events:none;-webkit-backdrop-filter:grayscale(1);backdrop-filter:grayscale(1)}
+@supports not ((backdrop-filter:grayscale(1)) or (-webkit-backdrop-filter:grayscale(1))){
+  #a11y-veil{display:none}
+  html.a11y-grayscale body>*:not(#a11y-fab):not(#a11y-panel):not(#a11y-mask):not(#a11y-veil){filter:grayscale(1)}
+}
+
+/* ==========================================================================
+   PREFERENCE CLASSES — toggled on <html> by the widget.
+   Text size is an inline font-size on <html>, computed from the template's own
+   root size (this build is html{font-size:62.5%}), so 110/125/150% scale the
+   --scale-text-rem / --scale-rem type + spacing systems proportionally instead
+   of blowing them up 10x.
+   ========================================================================== */
+
+/* --- Line height (3 steps) --- */
+html.a11y-lh-1 body{line-height:1.7!important}
+html.a11y-lh-2 body{line-height:2!important}
+html.a11y-lh-3 body{line-height:2.4!important}
+html.a11y-lh-1 body :where(p,li,span,div,a,h1,h2,h3,h4,h5,h6,blockquote,td,th,figcaption,label,dd,dt),
+html.a11y-lh-2 body :where(p,li,span,div,a,h1,h2,h3,h4,h5,h6,blockquote,td,th,figcaption,label,dd,dt),
+html.a11y-lh-3 body :where(p,li,span,div,a,h1,h2,h3,h4,h5,h6,blockquote,td,th,figcaption,label,dd,dt){line-height:inherit!important}
+
+/* --- Text align --- */
+html.a11y-align-left body :where(p,li,h1,h2,h3,h4,h5,h6,span,div,a,td,th,figcaption,blockquote){text-align:left!important}
+html.a11y-align-center body :where(p,li,h1,h2,h3,h4,h5,h6,span,div,a,td,th,figcaption,blockquote){text-align:center!important}
+html.a11y-align-right body :where(p,li,h1,h2,h3,h4,h5,h6,span,div,a,td,th,figcaption,blockquote){text-align:right!important}
+
+/* --- Readable font --- */
+html.a11y-readable body :where(p,li,span,div,a,button,input,textarea,select,h1,h2,h3,h4,h5,h6,blockquote,td,th,figcaption,label){font-family:Verdana,Geneva,"DejaVu Sans",system-ui,sans-serif!important}
+html.a11y-readable body :where(h1,h2,h3,h4,h5,h6){letter-spacing:.01em!important}
+
+/* --- High contrast --- Remapped onto THIS template's tokens (--c-* palette
+   and the derived --t-* theme tokens), so it adapts to the dark ui-dark
+   sections and the light ones without per-section rules. */
+html.a11y-contrast{--c-gray:#e6e6e6;--c-gray-rgb:230,230,230;--c-gray-light:#f2f2f2;--c-gray-light-rgb:242,242,242;--c-black-light:#111;--c-black-light-rgb:17,17,17}
+html.a11y-contrast body,html.a11y-contrast .ui-light{--t-text:#000;--t-text-rgb:0,0,0;--t-heading:#000;--t-heading-rgb:0,0,0;--t-small:rgba(0,0,0,.92);--t-smallest:rgba(0,0,0,.85);--t-line:rgba(0,0,0,.65);--t-primary:#1d4e63;--t-primary-rgb:29,78,99;--t-secondary:#000;--t-secondary-rgb:0,0,0}
+html.a11y-contrast .ui-dark{--t-text:#fff;--t-text-rgb:255,255,255;--t-heading:#fff;--t-heading-rgb:255,255,255;--t-small:rgba(255,255,255,.95);--t-smallest:rgba(255,255,255,.88);--t-line:rgba(255,255,255,.7);--t-primary:#a9d6ec;--t-primary-rgb:169,214,236;--t-secondary:#fff;--t-secondary-rgb:255,255,255}
+html.a11y-contrast body :where(p,li,span,div,a,h1,h2,h3,h4,h5,h6){text-shadow:none!important}
+
+/* --- Hide images --- neutral block so layout holds --- */
+html.a11y-hide-images img,
+html.a11y-hide-images video,
+html.a11y-hide-images iframe,
+html.a11y-hide-images svg{visibility:hidden!important}
+/* visibility:hidden suppresses the element's own background too, so a rule on
+   img/video never paints a placeholder. Put it on the visible wrappers — this
+   template's art-directed <picture> ladders — or a dark build blanks to black. */
+html.a11y-hide-images picture,
+html.a11y-hide-images .background,
+html.a11y-hide-images .media,
+html.a11y-hide-images figure{background:rgba(128,128,128,.22)!important;border-radius:8px;outline:1px solid rgba(128,128,128,.35);outline-offset:-1px}
+html.a11y-hide-images video,
+html.a11y-hide-images iframe{background:rgba(128,128,128,.22)!important;border-radius:8px}
+/* The widget itself must stay usable while images are hidden. */
+html.a11y-hide-images #a11y-panel svg,
+html.a11y-hide-images #a11y-fab svg,
+html.a11y-hide-images [aria-label="Accessibility options"] svg{visibility:visible!important}
+
+/* --- Pause animations --- also neutralises this template's scroll-driven
+   parallax transforms, not just durations. Locomotive parks off-screen
+   [data-scroll-section] blocks with a transform of its own, so those are
+   deliberately excluded or the page would collapse. */
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+html.a11y-reduce-motion [data-plugin="parallax"]:not([data-scroll-section]){transform:none!important}
+html.a11y-reduce-motion #a11y-fab{transition:none!important}
+
+/* --- Highlight links --- */
+html.a11y-highlight-links body a{text-decoration:underline!important;text-underline-offset:3px;outline:2px solid var(--a11y-accent);outline-offset:2px;border-radius:3px}
+html.a11y-highlight-links #a11y-panel a{outline:0}
